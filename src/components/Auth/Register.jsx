@@ -64,7 +64,7 @@ const Register = () => {
       
       console.log('Data being sent:', registrationData);
   
-      const response = await axios.post("http://127.0.0.1:8000/user/register/", registrationData);
+      const response = await axios.post("https://leaveapp-backend-rhbd.onrender.com/user/register/", registrationData);
       
       if (response.status === 201) {
         alert("Registration successful! Please login.");
