@@ -76,7 +76,7 @@ const AppliedLeave = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(leaveRequests) ? && leaveRequests.length > 0 (
+                  {Array.isArray(leaveRequests) && leaveRequests.length > 0  ? (
                     leaveRequests.map((leave) => (
                     <tr key={leave.id} className="border-b">
                       <td className="px-4 py-2">{leave.leave_type}</td>
