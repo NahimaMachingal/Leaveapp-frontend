@@ -76,7 +76,8 @@ const AppliedLeave = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {leaveRequests.map((leave) => (
+                  {Array.isArray(leaveRequests) ? (
+                    leaveRequests.map((leave) => (
                     <tr key={leave.id} className="border-b">
                       <td className="px-4 py-2">{leave.leave_type}</td>
                       <td className="px-4 py-2">{leave.start_date}</td>
@@ -88,8 +89,8 @@ const AppliedLeave = () => {
     <a
       href={
         leave.attachment.startsWith('http')
-          ? leave.attachment.replace('http://localhost:5173', 'http://localhost:8000') // Replace if it's an absolute URL
-          : `http://localhost:8000${leave.attachment}` // Assume relative path otherwise
+          ? leave.attachment.replace('http://localhost:5173', 'https://leaveapp-backend-rhbd.onrender.com') // Replace if it's an absolute URL
+          : `https://leaveapp-backend-rhbd.onrender.com${leave.attachment}` // Assume relative path otherwise
       }
       target="_blank"
       rel="noopener noreferrer"
@@ -102,7 +103,12 @@ const AppliedLeave = () => {
   )}
 </td>
                     </tr>
-                  ))}
+    ))
+  ) : (
+    <tr>
+      <td colSpan="6" className="text-center text-red-500">No leave requests found.</td>
+    </tr>
+  )}
                 </tbody>
               </table>
 
