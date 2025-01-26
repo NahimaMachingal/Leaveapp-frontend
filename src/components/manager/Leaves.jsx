@@ -127,7 +127,6 @@ const Leaves = () => {
               <thead>
                 <tr className="bg-gray-200 text-gray-600">
                   <th className="px-4 py-2">Leave Type</th>
-                  <th className="px-4 py-2">Attachment</th>
                   <th className="px-4 py-2">Start Date</th>
                   <th className="px-4 py-2">End Date</th>
                   <th className="px-4 py-2">Status</th>
@@ -137,25 +136,7 @@ const Leaves = () => {
                 {employeeLeaves.map((leave) => (
                   <tr key={leave.id} className="border-b hover:bg-gray-100">
                     <td className="px-4 py-2">{leave.leave_type}</td>
-                    <td className="px-4 py-2">
-  {leave.attachment ? (
-    <a
-      href={
-        leave.attachment.startsWith('http')
-          ? leave.attachment.replace('http://localhost:5173', 'http://localhost:8000') // Replace if it's an absolute URL
-          : `http://localhost:8000${leave.attachment}` // Assume relative path otherwise
-      }
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-500 hover:underline"
-    >
-      View Attachment
-    </a>
-  ) : (
-    <span>No attachment</span>
-  )}
-</td>
-
+                    
                     <td className="px-4 py-2">{leave.start_date}</td>
                     <td className="px-4 py-2">{leave.end_date}</td>
                     <td className="px-4 py-2">
