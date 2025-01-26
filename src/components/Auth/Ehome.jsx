@@ -142,7 +142,7 @@ const Ehome = () => {
                 onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300 mx-auto"
               >
-                <option value="" disabled>Select Leave Type</option>
+                <option value="">Select Leave Type</option>
                 <option value="annual">Annual Leave</option>
                 <option value="sick">Sick Leave</option>
                 <option value="casual">Casual Leave</option>
