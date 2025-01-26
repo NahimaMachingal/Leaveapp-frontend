@@ -72,7 +72,6 @@ const AppliedLeave = () => {
                     <th className="border-b px-4 py-2 text-left">End Date</th>
                     <th className="border-b px-4 py-2 text-left">Status</th>
                     <th className="border-b px-4 py-2 text-left">Reason</th>
-                    <th className="border-b px-4 py-2 text-left">Attachment</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,24 +83,7 @@ const AppliedLeave = () => {
                       <td className="px-4 py-2">{leave.end_date}</td>
                       <td className="px-4 py-2">{leave.status}</td>
                       <td className="px-4 py-2">{leave.reason}</td>
-                      <td className="px-4 py-2">
-  {leave.attachment ? (
-    <a
-      href={
-        leave.attachment.startsWith('http')
-          ? leave.attachment.replace('http://localhost:5173', 'https://leaveapp-backend-rhbd.onrender.com') // Replace if it's an absolute URL
-          : `https://leaveapp-backend-rhbd.onrender.com${leave.attachment}` // Assume relative path otherwise
-      }
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-500 hover:underline"
-    >
-      View Attachment
-    </a>
-  ) : (
-    <span>No attachment</span>
-  )}
-</td>
+                      
                     </tr>
     ))
   ) : (
