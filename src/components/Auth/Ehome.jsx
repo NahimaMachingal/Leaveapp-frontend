@@ -209,19 +209,7 @@ const Ehome = () => {
               )}
             </div>
 
-            {/* Attachment */}
-            <div>
-              <label htmlFor="attachment" className="block text-sm font-medium text-gray-600">
-                Attachment
-              </label>
-              <input
-                type="file"
-                name="attachment"
-                id="attachment"
-                onChange={handleFileChange}
-                className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300"
-              />
-            </div>
+            
 
 
             {/* Submit Button */}
