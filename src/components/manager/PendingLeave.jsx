@@ -58,7 +58,7 @@ const PendingLeave = () => {
               <tr className="bg-gray-200 text-gray-600">
                 <th className="px-4 py-2">Employee Name</th>
                 <th className="px-4 py-2">Leave Type</th>
-                <th className='px-4 py-2'>Attachment</th>
+                
                 <th className="px-4 py-2">Start Date</th>
                 <th className="px-4 py-2">End Date</th>
               </tr>
@@ -73,20 +73,7 @@ const PendingLeave = () => {
                     {leave.employee_name}
                   </td>
                   <td className="px-4 py-2">{leave.leave_type}</td>
-                  <td className="px-4 py-2">
-            {leave.attachment ? (
-              <a
-                href={leave.attachment}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                View Attachment
-              </a>
-            ) : (
-              <span>No attachment</span>
-            )}
-          </td>
+                  
                   <td className="px-4 py-2">{leave.start_date}</td>
                   <td className="px-4 py-2">{leave.end_date}</td>
                 </tr>
