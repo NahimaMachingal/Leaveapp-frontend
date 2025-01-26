@@ -6,7 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchLeaveRequests, submitLeaveRequest } from '../../features/employee/leaveSlice';
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../features/auth/authApi';
-
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Ehome = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,45 @@ const Ehome = () => {
     reason: '',
     attachment: null,
   });
+
+
+  const validationSchema = Yup.object({
+    leave_type: Yup.string().required('Leave type is required'),
+    start_date: Yup.date().required('Start date is required'),
+    end_date: Yup.date()
+      .required('End date is required')
+      .min(Yup.ref('start_date'), 'End date must be after start date'),
+    reason: Yup.string()
+      .required('Reason is required')
+      .min(10, 'Reason must be at least 10 characters'),
+     // Optional file validation
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      leave_type: '',
+      start_date: '',
+      end_date: '',
+      reason: '',
+      
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      const data = new FormData();
+      data.append('leave_type', values.leave_type);
+      data.append('start_date', values.start_date);
+      data.append('end_date', values.end_date);
+      data.append('reason', values.reason);
+      
+      dispatch(submitLeaveRequest(data)).then(() => {
+        toast.success('Leave applied successfully');
+      }).catch((error) => {
+        toast.error('Failed to submit leave request');
+      });
+      
+    },
+  });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,22 +83,7 @@ const Ehome = () => {
     navigate('/login'); // Redirect to the login page after logout
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append('leave_type', formData.leave_type);
-    data.append('start_date', formData.start_date);
-    data.append('end_date', formData.end_date);
-    data.append('reason', formData.reason);
-    if (formData.attachment) {
-      data.append('attachment', formData.attachment);
-    }
-    dispatch(submitLeaveRequest(data))
-    .then(() => {
-      toast.success('Leave applied successfully'); // Dispatch the FormData object
-    });
-  };
-
+  
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -101,18 +126,20 @@ const Ehome = () => {
       <div className="flex items-center justify-center mt-10">
         <div className="w-full bg-white p-8 shadow-lg rounded-lg">
           <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">Leave Request Form</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={formik.handleSubmit} className="space-y-4">
             {/* Leave Type */}
             <div>
               <label htmlFor="leave_type" className="block text-sm font-medium text-gray-600">
                 Leave Type
               </label>
               <select
+              
                 name="leave_type"
                 id="leave_type"
-                value={formData.leave_type}
-                onChange={handleChange}
-                required
+                value={formik.leave_type}
+                requiredvalue={formik.values.leave_type}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300 mx-auto"
               >
                 <option value="" disabled>Select Leave Type</option>
@@ -121,6 +148,9 @@ const Ehome = () => {
                 <option value="casual">Casual Leave</option>
                 <option value="other">Other</option>
               </select>
+              {formik.touched.leave_type && formik.errors.leave_type && (
+                <p className="text-red-500">{formik.errors.leave_type}</p>
+              )}
             </div>
 
             {/* Start Date */}
@@ -132,11 +162,14 @@ const Ehome = () => {
                 type="date"
                 name="start_date"
                 id="start_date"
-                value={formData.start_date}
-                onChange={handleChange}
-                required
+                value={formik.start_date}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300"
               />
+              {formik.touched.start_date && formik.errors.start_date && (
+                <p className="text-red-500">{formik.errors.start_date}</p>
+              )}
             </div>
 
             {/* End Date */}
@@ -148,11 +181,14 @@ const Ehome = () => {
                 type="date"
                 name="end_date"
                 id="end_date"
-                value={formData.end_date}
-                onChange={handleChange}
-                required
+                value={formik.values.end_date}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300"
               />
+              {formik.touched.end_date && formik.errors.end_date && (
+                <p className="text-red-500">{formik.errors.end_date}</p>
+              )}
             </div>
 
             {/* Reason */}
@@ -163,11 +199,14 @@ const Ehome = () => {
               <textarea
                 name="reason"
                 id="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                required
+                value={formik.values.reason}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300"
               />
+              {formik.touched.reason && formik.errors.reason && (
+                <p className="text-red-500">{formik.errors.reason}</p>
+              )}
             </div>
 
             {/* Attachment */}
@@ -204,3 +243,4 @@ const Ehome = () => {
 };
 
 export default Ehome;
+
