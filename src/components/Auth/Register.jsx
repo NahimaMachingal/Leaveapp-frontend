@@ -4,6 +4,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 
 const Register = () => {
@@ -67,15 +70,22 @@ const Register = () => {
       const response = await axios.post("https://leaveapp-backend-rhbd.onrender.com/user/register/", registrationData);
       
       if (response.status === 201) {
-        alert("Registration successful! Please login.");
-        navigate("/login");
+        toast.success("Registered Successfully", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+  
+        // Navigate to login after a short delay
+        setTimeout(() => navigate("/login"), 3000);
       }
     } catch (err) {
       console.error('Registration error:', err.response?.data);
       if (err.response?.data?.error) {
         setErrors({ general: err.response.data.error });
+        toast.error(err.response.data.error, { position: "top-center" });
       } else {
         setErrors({ general: "Registration failed. Please try again." });
+        toast.error("Registration failed. Please try again.", { position: "top-center" });
       }
     }
   };
