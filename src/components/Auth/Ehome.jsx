@@ -20,17 +20,18 @@ const Ehome = () => {
     start_date: '',
     end_date: '',
     reason: '',
-    
   });
-const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
   const maxFutureDate = new Date();
   maxFutureDate.setDate(maxFutureDate.getDate() + 45); // Set max future leave to 45 days from today
   const maxDateString = maxFutureDate.toISOString().split('T')[0];
 
+
   const validationSchema = Yup.object({
     leave_type: Yup.string().required('Leave type is required'),
     start_date: Yup.date().required('Start date is required')
-      .min(today, 'Start date cannot be in the past'),
+    .min(today, 'Start date cannot be in the past'),
     end_date: Yup.date()
       .required('End date is required')
       .min(Yup.ref('start_date'), 'End date must be after start date')
@@ -70,15 +71,12 @@ const today = new Date().toISOString().split('T')[0]; // Get today's date in YYY
 });
 
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, attachment: e.target.files[0] });
-  };
+  
 
   // Fetch leave requests on component mount
   useEffect(() => {
