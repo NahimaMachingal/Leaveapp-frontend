@@ -20,16 +20,21 @@ const Ehome = () => {
     start_date: '',
     end_date: '',
     reason: '',
-    attachment: null,
+    
   });
-
+const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  const maxFutureDate = new Date();
+  maxFutureDate.setDate(maxFutureDate.getDate() + 45); // Set max future leave to 45 days from today
+  const maxDateString = maxFutureDate.toISOString().split('T')[0];
 
   const validationSchema = Yup.object({
     leave_type: Yup.string().required('Leave type is required'),
-    start_date: Yup.date().required('Start date is required'),
+    start_date: Yup.date().required('Start date is required')
+      .min(today, 'Start date cannot be in the past'),
     end_date: Yup.date()
       .required('End date is required')
-      .min(Yup.ref('start_date'), 'End date must be after start date'),
+      .min(Yup.ref('start_date'), 'End date must be after start date')
+      .max(maxDateString, 'Leave cannot be booked more than 45 days in advance'),
     reason: Yup.string()
       .required('Reason is required')
       .min(10, 'Reason must be at least 10 characters'),
@@ -45,21 +50,25 @@ const Ehome = () => {
       
     },
     validationSchema,
-    onSubmit: (values) => {
+  onSubmit: async (values, { resetForm }) => {
+    try {
       const data = new FormData();
       data.append('leave_type', values.leave_type);
       data.append('start_date', values.start_date);
       data.append('end_date', values.end_date);
       data.append('reason', values.reason);
-      
-      dispatch(submitLeaveRequest(data)).then(() => {
-        toast.success('Leave applied successfully');
-      }).catch((error) => {
-        toast.error('Failed to submit leave request');
-      });
-      
-    },
-  });
+
+      await dispatch(submitLeaveRequest(data)).unwrap(); // Ensure successful dispatch
+      toast.success('Leave applied successfully');
+
+      resetForm(); // ✅ Reset form fields
+      setTimeout(() => navigate('/appliedleave'), 1000); // ✅ Redirect after 1s delay
+    } catch (error) {
+      toast.error('Failed to submit leave request');
+    }
+  },
+});
+
 
 
   const handleChange = (e) => {
@@ -161,8 +170,10 @@ const Ehome = () => {
               <input
                 type="date"
                 name="start_date"
+                min={today}  // Prevent past dates
+                max={maxDateString}  // Restrict leave in the far future
                 id="start_date"
-                value={formik.start_date}
+                value={formik.values.start_date}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="w-9/12 px-4 py-2 mt-1 border rounded-lg focus:ring focus:ring-indigo-300"
