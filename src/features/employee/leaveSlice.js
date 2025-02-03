@@ -138,8 +138,8 @@ const leaveSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(fetchLeaveRequests.fulfilled, (state, action) => {
-        state.leaveRequests = Array.isArray(action.payload) ? action.payload : []; // ✅ Ensure it's an array
-    state.status = 'succeeded';
+        state.status = 'succeeded';
+        state.leaveRequests = action.payload;
       })
       .addCase(fetchLeaveRequests.rejected, (state, action) => {
         state.status = 'failed';
